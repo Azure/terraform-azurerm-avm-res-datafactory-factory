@@ -1,4 +1,4 @@
-# terraform-azurerm-avm-template
+# terraform-azurerm-avm-res-datafactory
 
 This is a template repo for Terraform Azure Verified Modules.
 
