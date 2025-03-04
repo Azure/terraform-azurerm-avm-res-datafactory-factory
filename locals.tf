@@ -1,7 +1,6 @@
 # Helper locals to make the dynamic block more readable
 # There are three attributes here to cater for resources that
 locals {
-
   managed_identities = {
     system_assigned_user_assigned = (var.managed_identities.system_assigned || length(var.managed_identities.user_assigned_resource_ids) > 0) ? {
       this = {
@@ -21,7 +20,6 @@ locals {
       }
     } : {}
   }
-
   # Private endpoint application security group associations
   private_endpoint_application_security_group_associations = { for assoc in flatten([
     for pe_k, pe_v in var.private_endpoints : [
@@ -32,8 +30,5 @@ locals {
       }
     ]
   ]) : "${assoc.pe_key}-${assoc.asg_key}" => assoc }
-
-
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
-
 }

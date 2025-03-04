@@ -30,7 +30,6 @@ resource "azurerm_data_factory" "this" {
       value = global_parameter.value.value
     }
   }
-
   dynamic "identity" {
     for_each = local.managed_identities.system_assigned_user_assigned
 
@@ -39,7 +38,6 @@ resource "azurerm_data_factory" "this" {
       identity_ids = identity.value.user_assigned_resource_ids
     }
   }
-
   dynamic "vsts_configuration" {
     for_each = var.vsts_configuration != null ? [var.vsts_configuration] : []
 
