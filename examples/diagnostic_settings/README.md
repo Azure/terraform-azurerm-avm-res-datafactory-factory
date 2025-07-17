@@ -6,6 +6,7 @@ This deploys the Azure Data Factory with Diagnostic Settings.
 ```hcl
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -56,9 +57,10 @@ resource "azurerm_log_analytics_workspace" "this" {
 # This is the module call
 module "datafactory" {
   source = "../../"
+
+  location = azurerm_resource_group.this.location
   # source             = "Azure/avm-res-keyvault-vault/azurerm"
   name                = module.naming.data_factory.name_unique
-  location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   diagnostic_settings = {
     to_la = {
@@ -79,14 +81,6 @@ The following requirements are needed by this module:
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.87)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.87)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
 
 ## Resources
 

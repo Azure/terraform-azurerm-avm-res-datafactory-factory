@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -50,9 +51,10 @@ resource "azurerm_log_analytics_workspace" "this" {
 # This is the module call
 module "datafactory" {
   source = "../../"
+
+  location = azurerm_resource_group.this.location
   # source             = "Azure/avm-res-keyvault-vault/azurerm"
   name                = module.naming.data_factory.name_unique
-  location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   diagnostic_settings = {
     to_la = {

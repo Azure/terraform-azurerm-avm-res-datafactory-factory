@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -20,8 +21,9 @@ provider "azurerm" {
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.3.0"
-  prefix  = ["test"]
-  suffix  = ["03"]
+
+  prefix = ["test"]
+  suffix = ["03"]
 }
 
 # Create Resource Group with dynamically generated name
@@ -33,8 +35,8 @@ resource "azurerm_resource_group" "rg" {
 module "basic" {
   source = "../../" # Adjust this path based on your module's location
 
+  location = azurerm_resource_group.rg.location
   # Required variables (adjust values accordingly)
   name                = module.naming.data_factory.name
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
 }
