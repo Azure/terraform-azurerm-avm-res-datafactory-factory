@@ -6,6 +6,7 @@ This deploys the Azure Data Factory with Integration Runtime Self Hosted Setting
 ```hcl
 terraform {
   required_version = ">= 1.9, < 2.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -26,8 +27,9 @@ provider "azurerm" {
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.3.0"
-  prefix  = ["test"]
-  suffix  = ["01"]
+
+  prefix = ["test"]
+  suffix = ["01"]
 }
 
 # Create Resource Group
@@ -58,10 +60,10 @@ resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {
 module "df_with_integration_runtime_self_hosted" {
   source = "../../" # Adjust this path based on your module's location
 
+  location = azurerm_resource_group.rg.location
   # Required variables (adjust values accordingly)
   name                = module.naming.data_factory.name
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
   integration_runtime_self_hosted = {
     example = {
       name        = module.naming.data_factory_integration_runtime_managed.name
@@ -71,7 +73,6 @@ module "df_with_integration_runtime_self_hosted" {
       }
     }
   }
-
 }
 
 
@@ -85,12 +86,6 @@ The following requirements are needed by this module:
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.87)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.87)
 
 ## Resources
 
