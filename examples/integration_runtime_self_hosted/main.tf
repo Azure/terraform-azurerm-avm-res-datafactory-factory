@@ -21,9 +21,6 @@ provider "azurerm" {
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.3.0"
-
-  prefix = ["test"]
-  suffix = ["01"]
 }
 
 # Create Resource Group
@@ -56,7 +53,7 @@ module "df_with_integration_runtime_self_hosted" {
 
   location = azurerm_resource_group.rg.location
   # Required variables (adjust values accordingly)
-  name                = module.naming.data_factory.name
+  name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
   integration_runtime_self_hosted = {
     example = {

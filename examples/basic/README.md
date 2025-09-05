@@ -28,9 +28,6 @@ provider "azurerm" {
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.3.0"
-
-  prefix = ["test"]
-  suffix = ["03"]
 }
 
 # Create Resource Group with dynamically generated name
@@ -44,7 +41,7 @@ module "basic" {
 
   location = azurerm_resource_group.rg.location
   # Required variables (adjust values accordingly)
-  name                = module.naming.data_factory.name
+  name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
 }
 ```

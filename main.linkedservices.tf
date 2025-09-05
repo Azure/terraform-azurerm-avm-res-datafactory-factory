@@ -179,3 +179,12 @@ resource "azurerm_data_factory_linked_service_key_vault" "this" {
   integration_runtime_name = each.value.integration_runtime_name
   parameters               = each.value.parameters
 }
+
+resource "azurerm_data_factory_linked_service_cosmosdb_mongoapi" "this" {
+  for_each = var.linked_service_cosmosdb_mongoapi
+
+  data_factory_id   = azurerm_data_factory.this.id
+  name              = each.value.name
+  connection_string = each.value.connection_string
+  database          = each.value.database
+}

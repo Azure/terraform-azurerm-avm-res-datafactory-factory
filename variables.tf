@@ -86,6 +86,33 @@ variable "customer_managed_key_identity_id" {
   description = "Specifies the ID of the user assigned identity associated with the Customer Managed Key. Must be supplied if customer_managed_key_id is set."
 }
 
+variable "dataset_cosmosdb_mongoapi" {
+  type = map(object({
+    name                = string
+    linked_service_name = string
+    annotations         = optional(list(string))
+    collection_name     = optional(string)
+    description         = optional(string)
+    folder              = optional(string)
+    parameters          = optional(map(string))
+  }))
+  default     = {}
+  description = <<DESCRIPTION
+A map of Azure Data Factory Datasets for CosmosDB MongoDB API, where each key represents a unique dataset configuration.
+Each object in the map consists of the following properties:
+
+- `name` - (Required) The unique name of the Data Factory Dataset for CosmosDB MongoDB API.
+- `linked_service_name` - (Required) The name of the linked service that references the CosmosDB MongoDB API.
+- `annotations` - (Optional) A list of tags that can be used for describing the Dataset.
+- `collection_name` - (Optional) The name of the collection in the CosmosDB MongoDB API.
+- `description` - (Optional) A description for the Dataset.
+- `folder` - (Optional) The folder name that this dataset is in. If not specified, dataset will appear at the root level.
+- `parameters` - (Optional) A map of parameters to associate with the dataset.
+
+DESCRIPTION
+  nullable    = false
+}
+
 variable "diagnostic_settings" {
   type = map(object({
     name                                     = optional(string, null)
@@ -360,6 +387,22 @@ Each object in the map consists of the following properties:
 - `key_vault_password` - (Optional) Use an existing Key Vault to store the Azure SQL Database password.
   - `linked_service_name` - (Required) The name of the Key Vault Linked Service.
   - `secret_name` - (Required) The secret storing the SQL Server password.
+DESCRIPTION
+}
+
+variable "linked_service_cosmosdb_mongoapi" {
+  type = map(object({
+    name              = string
+    connection_string = optional(string)
+    database          = optional(string)
+  }))
+  default     = {}
+  description = <<DESCRIPTION
+A map of CosmosDB MongoDB API linked services, where each key represents a unique linked service configuration. Each object in the map consists of the following properties:
+
+- `name` - (Required) Specifies the name of the Data Factory Linked Service.
+- `connection_string` - (Optional) The connection string to the CosmosDB MongoDB API.
+- `database` - (Optional) The name of the database in the CosmosDB MongoDB API.
 DESCRIPTION
 }
 
