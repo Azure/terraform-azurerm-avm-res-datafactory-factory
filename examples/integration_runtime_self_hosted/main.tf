@@ -32,7 +32,7 @@ module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.2"
 
-  suffix = random_string.seed.result
+  suffix = random_string.suffix.result
 }
 
 # Create Resource Group
