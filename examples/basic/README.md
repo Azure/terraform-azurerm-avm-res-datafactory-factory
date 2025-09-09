@@ -43,6 +43,7 @@ module "basic" {
   # Required variables (adjust values accordingly)
   name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
+  enable_telemetry    = false
 }
 ```
 

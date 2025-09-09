@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 4.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
   }
 }
 
@@ -24,10 +28,18 @@ provider "azurerm" {
   }
 }
 
+resource "random_string" "suffix" {
+  length  = 4
+  special = false
+  upper   = false
+}
+
 # Naming Module for Consistent Resource Names
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.2"
+
+  suffix = random_string.seed.result
 }
 
 # Create Resource Group
@@ -62,6 +74,7 @@ module "df_with_integration_runtime_self_hosted" {
   # Required variables (adjust values accordingly)
   name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
+  enable_telemetry    = false
   integration_runtime_self_hosted = {
     example = {
       name        = module.naming.data_factory_integration_runtime_managed.name
@@ -85,6 +98,8 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
+- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
+
 ## Resources
 
 The following resources are used by this module:
@@ -93,6 +108,7 @@ The following resources are used by this module:
 - [azurerm_data_factory_integration_runtime_self_hosted.host](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_integration_runtime_self_hosted) (resource)
 - [azurerm_resource_group.host](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [random_string.suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs

@@ -36,7 +36,7 @@ module "naming" {
 
 # Create Resource Group with dynamically generated name
 resource "azurerm_resource_group" "rg" {
-  location = "southeastasia"
+  location = "eastasia"
   name     = module.naming.resource_group.name
 }
 
@@ -71,6 +71,7 @@ module "df_with_linked_service" {
   # Required variables (adjust values accordingly)
   name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
+  enable_telemetry    = false
   linked_service_azure_file_storage = {
     example = {
       name              = module.naming.data_factory_linked_service_data_lake_storage_gen2.name
