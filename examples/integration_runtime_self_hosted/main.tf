@@ -49,9 +49,9 @@ resource "azurerm_resource_group" "host" {
 }
 
 resource "azurerm_user_assigned_identity" "example" {
-  location            = azurerm_resource_group.test.location
+  location            = azurerm_resource_group.host.location
   name                = module.naming.data_factory.name_unique
-  resource_group_name = azurerm_resource_group.test.name
+  resource_group_name = azurerm_resource_group.host.name
 }
 
 resource "azurerm_data_factory" "host" {
@@ -65,12 +65,18 @@ resource "azurerm_data_factory" "host" {
   }
 }
 
+resource "azurerm_data_factory_credential_user_managed_identity" "example" {
+  data_factory_id = azurerm_data_factory.host.id
+  identity_id     = azurerm_user_assigned_identity.example.id
+  name            = "credential-${module.naming.data_factory.name_unique}"
+  annotations     = ["1"]
+  description     = "ORIGINAL DESCRIPTION"
+}
+
 resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {
   data_factory_id = azurerm_data_factory.host.id
   name            = module.naming.data_factory_integration_runtime_managed.name_unique
 }
-
-
 
 module "df_with_integration_runtime_self_hosted" {
   source = "../../" # Adjust this path based on your module's location
@@ -85,7 +91,8 @@ module "df_with_integration_runtime_self_hosted" {
       name        = module.naming.data_factory_integration_runtime_managed.name
       description = "test description"
       rbac_authorization = {
-        resource_id = azurerm_data_factory_integration_runtime_self_hosted.host.id
+        resource_id     = azurerm_data_factory_integration_runtime_self_hosted.host.id
+        credential_name = azurerm_data_factory_credential_user_managed_identity.example.name
       }
     }
   }
