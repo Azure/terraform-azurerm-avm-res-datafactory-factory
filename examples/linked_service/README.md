@@ -37,7 +37,7 @@ module "naming" {
 # Create Resource Group with dynamically generated name
 resource "azurerm_resource_group" "rg" {
   location = "eastasia"
-  name     = module.naming.resource_group.name
+  name     = module.naming.resource_group.name_unique
 }
 
 resource "random_string" "name_suffix" {

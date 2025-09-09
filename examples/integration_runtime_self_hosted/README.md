@@ -46,24 +46,24 @@ module "naming" {
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   location = "southeastasia"
-  name     = "${module.naming.resource_group.name}-rg"
+  name     = "${module.naming.resource_group.name_unique}-rg"
 }
 
 # Create Resource Group
 resource "azurerm_resource_group" "host" {
   location = "southeastasia"
-  name     = "${module.naming.resource_group.name}-host"
+  name     = "${module.naming.resource_group.name_unique}-host"
 }
 
 resource "azurerm_data_factory" "host" {
   location            = azurerm_resource_group.host.location
-  name                = module.naming.data_factory.name
+  name                = module.naming.data_factory.name_unique
   resource_group_name = azurerm_resource_group.host.name
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {
   data_factory_id = azurerm_data_factory.host.id
-  name            = module.naming.data_factory_integration_runtime_managed.name
+  name            = module.naming.data_factory_integration_runtime_managed.name_unique
 }
 
 

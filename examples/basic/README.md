@@ -27,13 +27,13 @@ provider "azurerm" {
 # Single Naming Module for all resources
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
+  version = "0.4.2"
 }
 
 # Create Resource Group with dynamically generated name
 resource "azurerm_resource_group" "rg" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = module.naming.resource_group.name_unique
 }
 
 module "basic" {
@@ -89,7 +89,7 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: 0.3.0
+Version: 0.4.2
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
