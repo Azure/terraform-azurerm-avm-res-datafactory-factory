@@ -55,10 +55,21 @@ resource "azurerm_resource_group" "host" {
   name     = "${module.naming.resource_group.name_unique}-host"
 }
 
+resource "azurerm_user_assigned_identity" "example" {
+  location            = azurerm_resource_group.test.location
+  name                = module.naming.data_factory.name_unique
+  resource_group_name = azurerm_resource_group.test.name
+}
+
 resource "azurerm_data_factory" "host" {
   location            = azurerm_resource_group.host.location
   name                = module.naming.data_factory.name_unique
   resource_group_name = azurerm_resource_group.host.name
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.example.id]
+  }
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {
@@ -109,6 +120,7 @@ The following resources are used by this module:
 - [azurerm_data_factory_integration_runtime_self_hosted.host](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_integration_runtime_self_hosted) (resource)
 - [azurerm_resource_group.host](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_user_assigned_identity.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) (resource)
 - [random_string.suffix](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/string) (resource)
 
 <!-- markdownlint-disable MD013 -->

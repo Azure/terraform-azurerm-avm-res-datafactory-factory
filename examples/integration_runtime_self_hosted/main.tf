@@ -48,10 +48,21 @@ resource "azurerm_resource_group" "host" {
   name     = "${module.naming.resource_group.name_unique}-host"
 }
 
+resource "azurerm_user_assigned_identity" "example" {
+  location            = azurerm_resource_group.test.location
+  name                = module.naming.data_factory.name_unique
+  resource_group_name = azurerm_resource_group.test.name
+}
+
 resource "azurerm_data_factory" "host" {
   location            = azurerm_resource_group.host.location
   name                = module.naming.data_factory.name_unique
   resource_group_name = azurerm_resource_group.host.name
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.example.id]
+  }
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {

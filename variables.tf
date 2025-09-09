@@ -244,6 +244,7 @@ variable "integration_runtime_self_hosted" {
   type = map(object({
     data_factory_id                              = optional(string)
     name                                         = string
+    credential_name                              = optional(string)
     description                                  = optional(string, null)
     self_contained_interactive_authoring_enabled = optional(bool, null)
     rbac_authorization = optional(object({
@@ -256,6 +257,7 @@ A map of Azure Data Factory Self-hosted Integration Runtimes, where each key rep
 
 - `data_factory_id` - (Required) The ID of the Data Factory where the integration runtime is associated.
 - `name` - (Required) The unique name of the integration runtime. Changing this forces a new resource to be created.
+- `credential_name` - (Optional) The name of the credential to use for the Managed Integration Runtime.
 - `description` - (Optional) A description of the integration runtime.
 - `self_contained_interactive_authoring_enabled` - (Optional) Specifies whether to enable interactive authoring when the self-hosted integration runtime cannot establish a connection with Azure Relay.
 - `rbac_authorization` - (Optional) Defines RBAC authorization settings. Changing this forces a new resource to be created.
