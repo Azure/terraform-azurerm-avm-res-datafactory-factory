@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.87"
+      version = "~> 4.0"
     }
   }
 }
@@ -20,19 +20,19 @@ provider "azurerm" {
 # Naming Module for Consistent Resource Names
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
+  version = "0.4.2"
 }
 
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = "${module.naming.resource_group.name}-rg"
 }
 
 # Create Resource Group
 resource "azurerm_resource_group" "host" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = "${module.naming.resource_group.name}-host"
 }
 
 resource "azurerm_data_factory" "host" {

@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.87"
+      version = "~> 4.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -24,7 +24,7 @@ provider "azurerm" {
 # Single Naming Module for all resources
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
+  version = "0.4.2"
 }
 
 # Create Resource Group with dynamically generated name
@@ -52,9 +52,9 @@ resource "azurerm_storage_account" "storage" {
 
 # Create an Azure File Share with dynamically generated name
 resource "azurerm_storage_share" "fileshare" {
-  name                 = module.naming.storage_share.name
-  quota                = 5
-  storage_account_name = azurerm_storage_account.storage.name
+  name               = module.naming.storage_share.name
+  quota              = 5
+  storage_account_id = azurerm_storage_account.storage.id
 }
 
 module "df_with_linked_service" {

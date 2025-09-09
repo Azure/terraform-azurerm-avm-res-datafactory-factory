@@ -11,7 +11,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.87"
+      version = "~> 4.0"
     }
   }
 }
@@ -27,19 +27,19 @@ provider "azurerm" {
 # Naming Module for Consistent Resource Names
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
+  version = "0.4.2"
 }
 
 # Create Resource Group
 resource "azurerm_resource_group" "rg" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = "${module.naming.resource_group.name}-rg"
 }
 
 # Create Resource Group
 resource "azurerm_resource_group" "host" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = "${module.naming.resource_group.name}-host"
 }
 
 resource "azurerm_data_factory" "host" {
@@ -83,7 +83,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.9, < 2.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.87)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 ## Resources
 
@@ -121,7 +121,7 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: 0.3.0
+Version: 0.4.2
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
