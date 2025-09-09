@@ -30,6 +30,7 @@ provider "azurerm" {
 
 resource "random_string" "suffix" {
   length  = 4
+  numeric = false
   special = false
   upper   = false
 }
@@ -39,7 +40,7 @@ module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.2"
 
-  suffix = random_string.suffix.result
+  suffix = [random_string.suffix.result]
 }
 
 # Create Resource Group
