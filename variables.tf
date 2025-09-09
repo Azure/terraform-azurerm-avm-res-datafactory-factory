@@ -86,6 +86,66 @@ variable "customer_managed_key_identity_id" {
   description = "Specifies the ID of the user assigned identity associated with the Customer Managed Key. Must be supplied if customer_managed_key_id is set."
 }
 
+variable "dataset_cosmosdb_mongoapi" {
+  type = map(object({
+    name                = string
+    linked_service_name = string
+    collection_name     = string
+    annotations         = optional(list(string))
+    description         = optional(string)
+    folder              = optional(string)
+    parameters          = optional(map(string))
+  }))
+  default     = {}
+  description = <<DESCRIPTION
+A map of Azure Data Factory Datasets for CosmosDB MongoDB API, where each key represents a unique dataset configuration.
+Each object in the map consists of the following properties:
+
+- `name` - (Required) The unique name of the Data Factory Dataset for CosmosDB MongoDB API.
+- `linked_service_name` - (Required) The name of the linked service that references the CosmosDB MongoDB API.
+- `collection_name` - (Required) The name of the collection in the CosmosDB MongoDB API.
+- `annotations` - (Optional) A list of tags that can be used for describing the Dataset.
+- `description` - (Optional) A description for the Dataset.
+- `folder` - (Optional) The folder name that this dataset is in. If not specified, dataset will appear at the root level.
+- `parameters` - (Optional) A map of parameters to associate with the dataset.
+
+DESCRIPTION
+  nullable    = false
+
+  validation {
+    condition = alltrue([
+      for dataset in var.dataset_cosmosdb_mongoapi : !can(regex("[-.+?/<>*%&:\\\\]", dataset.name))
+    ])
+    error_message = "Dataset names cannot contain any of the following characters: '-', '.', '+', '?', '/', '<', '>', '*', '%', '&', ':', '\\'."
+  }
+  validation {
+    condition = alltrue([
+      for dataset in var.dataset_cosmosdb_mongoapi : length(trimspace(dataset.linked_service_name)) > 0
+    ])
+    error_message = "The linked_service_name cannot be empty or contain only whitespace characters."
+  }
+  validation {
+    condition = alltrue([
+      for dataset in var.dataset_cosmosdb_mongoapi : length(trimspace(dataset.collection_name)) > 0
+    ])
+    error_message = "The collection_name cannot be empty or contain only whitespace characters."
+  }
+  validation {
+    condition = alltrue([
+      for dataset in var.dataset_cosmosdb_mongoapi :
+      dataset.description == null ? true : length(trimspace(dataset.description)) > 0
+    ])
+    error_message = "The description cannot be empty or contain only whitespace characters when provided."
+  }
+  validation {
+    condition = alltrue([
+      for dataset in var.dataset_cosmosdb_mongoapi :
+      dataset.folder == null ? true : length(trimspace(dataset.folder)) > 0
+    ])
+    error_message = "The folder cannot be empty or contain only whitespace characters when provided."
+  }
+}
+
 variable "diagnostic_settings" {
   type = map(object({
     name                                     = optional(string, null)
@@ -360,6 +420,22 @@ Each object in the map consists of the following properties:
 - `key_vault_password` - (Optional) Use an existing Key Vault to store the Azure SQL Database password.
   - `linked_service_name` - (Required) The name of the Key Vault Linked Service.
   - `secret_name` - (Required) The secret storing the SQL Server password.
+DESCRIPTION
+}
+
+variable "linked_service_cosmosdb_mongoapi" {
+  type = map(object({
+    name              = string
+    connection_string = optional(string)
+    database          = optional(string)
+  }))
+  default     = {}
+  description = <<DESCRIPTION
+A map of CosmosDB MongoDB API linked services, where each key represents a unique linked service configuration. Each object in the map consists of the following properties:
+
+- `name` - (Required) Specifies the name of the Data Factory Linked Service.
+- `connection_string` - (Optional) The connection string to the CosmosDB MongoDB API.
+- `database` - (Optional) The name of the database in the CosmosDB MongoDB API.
 DESCRIPTION
 }
 
