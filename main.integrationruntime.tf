@@ -19,8 +19,8 @@ resource "azapi_resource" "integration_runtime_self_hosted" {
         linkedInfo = each.value.rbac_authorization != null ? {
           authorizationType = "RBAC"
           resourceId        = each.value.rbac_authorization.resource_id
-          credential = each.value.credential_name == null ? null : {
-            referenceName = each.value.credential_name
+          credential = each.value.rbac_authorization.credential_name == null ? null : {
+            referenceName = each.value.rbac_authorization.credential_name
           }
         } : null
       }
