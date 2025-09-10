@@ -74,8 +74,6 @@ resource "azurerm_public_ip" "example" {
   location            = azurerm_resource_group.host.location
   name                = "pip"
   resource_group_name = azurerm_resource_group.host.name
-  sku                 = "Standard"
-  zones               = ["1", "2"]
 }
 
 resource "azurerm_network_interface" "example" {
@@ -112,7 +110,7 @@ resource "azurerm_windows_virtual_machine" "bootstrap" {
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = "Standard_LRS"
   }
   source_image_reference {
     offer     = "WindowsServer"
