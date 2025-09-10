@@ -306,7 +306,7 @@ map(object({
     data_factory_id                              = optional(string)
     name                                         = string
     description                                  = optional(string, null)
-    self_contained_interactive_authoring_enabled = optional(bool, null)
+    self_contained_interactive_authoring_enabled = optional(bool, true)
     rbac_authorization = optional(object({
       credential_name = optional(string)
       resource_id     = string

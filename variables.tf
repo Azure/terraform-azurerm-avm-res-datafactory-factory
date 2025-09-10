@@ -245,7 +245,7 @@ variable "integration_runtime_self_hosted" {
     data_factory_id                              = optional(string)
     name                                         = string
     description                                  = optional(string, null)
-    self_contained_interactive_authoring_enabled = optional(bool, null)
+    self_contained_interactive_authoring_enabled = optional(bool, true)
     rbac_authorization = optional(object({
       credential_name = optional(string)
       resource_id     = string
@@ -532,7 +532,7 @@ Each object in the map consists of the following properties:
 
 ### Authentication Options (Only one can be set):
 - `access_token` - (Optional) Authenticate to Databricks via an access token.
-- `key_vault_password` - (Optional) Authenticate via Azure Key Vault. 
+- `key_vault_password` - (Optional) Authenticate via Azure Key Vault.
   - `linked_service_name` - (Required) Name of the Key Vault Linked Service.
   - `secret_name` - (Required) The secret storing the access token.
 - `msi_work_space_resource_id` - (Optional) Authenticate via managed service identity.
