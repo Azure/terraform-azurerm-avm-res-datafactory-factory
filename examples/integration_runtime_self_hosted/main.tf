@@ -92,7 +92,7 @@ resource "random_password" "pass" {
 
 resource "azurerm_virtual_machine" "bootstrap" {
   location                      = azurerm_resource_group.host.location
-  name                          = "vm"
+  name                          = "vm${random_string.suffix.result}"
   network_interface_ids         = [azurerm_network_interface.example.id]
   resource_group_name           = azurerm_resource_group.host.name
   vm_size                       = "Standard_F4"
