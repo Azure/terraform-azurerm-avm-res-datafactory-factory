@@ -89,16 +89,16 @@ resource "azurerm_network_interface" "example" {
   }
 }
 
-resource random_password "pass" {
-  length = 15
-  upper = true
-  lower = true
+resource "random_password" "pass" {
+  length  = 15
+  upper   = true
+  lower   = true
   special = false
   numeric = true
 }
 
 resource "azurerm_virtual_machine" "bootstrap" {
-  name                          = "bootstrapvm"
+  name                          = "vm"
   location                      = azurerm_resource_group.host.location
   resource_group_name           = azurerm_resource_group.host.name
   network_interface_ids         = [azurerm_network_interface.example.id]
@@ -182,13 +182,13 @@ module "df_with_integration_runtime_self_hosted" {
   }
   credential_user_managed_identity = {
     example = {
-      name = "credential-${azurerm_user_assigned_identity.example.name}"
+      name        = "credential-${azurerm_user_assigned_identity.example.name}"
       identity_id = azurerm_user_assigned_identity.example.id
-      annotations     = ["1"]
-      description     = "ORIGINAL DESCRIPTION"
+      annotations = ["1"]
+      description = "ORIGINAL DESCRIPTION"
     }
   }
-  enable_telemetry    = false
+  enable_telemetry = false
   integration_runtime_self_hosted = {
     example = {
       name        = module.naming.data_factory_integration_runtime_managed.name
@@ -202,7 +202,7 @@ module "df_with_integration_runtime_self_hosted" {
   depends_on = [
     azurerm_role_assignment.target,
     azurerm_virtual_machine_extension.bootstrap,
-   ]
+  ]
 }
 
 
