@@ -56,87 +56,84 @@ resource "azurerm_resource_group" "host" {
 }
 
 resource "azurerm_virtual_network" "example" {
-  name                = "hostvnet"
-  address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.host.location
+  name                = "hostvnet"
   resource_group_name = azurerm_resource_group.host.name
+  address_space       = ["10.0.0.0/16"]
 }
 
 resource "azurerm_subnet" "example" {
+  address_prefixes     = ["10.0.2.0/24"]
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.host.name
   virtual_network_name = azurerm_virtual_network.example.name
-  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "example" {
-  name                = "pip"
-  location            = azurerm_resource_group.host.location
-  resource_group_name = azurerm_resource_group.host.name
   allocation_method   = "Static"
+  location            = azurerm_resource_group.host.location
+  name                = "pip"
+  resource_group_name = azurerm_resource_group.host.name
 }
 
 resource "azurerm_network_interface" "example" {
-  name                = "nic"
   location            = azurerm_resource_group.host.location
+  name                = "nic"
   resource_group_name = azurerm_resource_group.host.name
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.example.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.example.id
+    subnet_id                     = azurerm_subnet.example.id
   }
 }
 
 resource "random_password" "pass" {
   length  = 15
-  upper   = true
   lower   = true
-  special = false
   numeric = true
+  special = false
+  upper   = true
 }
 
 resource "azurerm_virtual_machine" "bootstrap" {
-  name                          = "vm"
   location                      = azurerm_resource_group.host.location
-  resource_group_name           = azurerm_resource_group.host.name
+  name                          = "vm"
   network_interface_ids         = [azurerm_network_interface.example.id]
+  resource_group_name           = azurerm_resource_group.host.name
   vm_size                       = "Standard_F4"
   delete_os_disk_on_termination = true
 
-  storage_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = "2016-Datacenter"
-    version   = "latest"
-  }
-
   storage_os_disk {
+    create_option     = "FromImage"
     name              = "myosdisk1"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
-
   os_profile {
-    computer_name  = "bootstrapvm"
     admin_username = "testadmin"
+    computer_name  = "bootstrapvm"
     admin_password = random_password.pass.result
   }
-
   os_profile_windows_config {
-    timezone           = "Pacific Standard Time"
     provision_vm_agent = true
+    timezone           = "Pacific Standard Time"
+  }
+  storage_image_reference {
+    offer     = "WindowsServer"
+    publisher = "MicrosoftWindowsServer"
+    sku       = "2016-Datacenter"
+    version   = "latest"
   }
 }
 
 resource "azurerm_virtual_machine_extension" "bootstrap" {
   name                 = "bootstrapExt"
-  virtual_machine_id   = azurerm_virtual_machine.bootstrap.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
+  virtual_machine_id   = azurerm_virtual_machine.bootstrap.id
   settings = jsonencode({
     "fileUris"         = ["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/5661e3290f1d072195d26a5fc9d52bb372a55f48/quickstarts/microsoft.compute/vms-with-selfhost-integration-runtime/gatewayInstall.ps1"],
     "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ${azurerm_data_factory_integration_runtime_self_hosted.host.primary_authorization_key} && timeout /t 120"
@@ -156,15 +153,14 @@ resource "azurerm_data_factory" "host" {
 }
 
 resource "azurerm_role_assignment" "target" {
+  principal_id         = azurerm_user_assigned_identity.example.principal_id
   scope                = azurerm_data_factory.host.id
   role_definition_name = "Contributor"
-  principal_id         = azurerm_user_assigned_identity.example.principal_id
 }
 
 resource "azurerm_data_factory_integration_runtime_self_hosted" "host" {
   data_factory_id = azurerm_data_factory.host.id
   name            = module.naming.data_factory_integration_runtime_managed.name_unique
-
 }
 
 module "df_with_integration_runtime_self_hosted" {
@@ -174,12 +170,6 @@ module "df_with_integration_runtime_self_hosted" {
   # Required variables (adjust values accordingly)
   name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
-  managed_identities = {
-    system_assigned = false
-    user_assigned_resource_ids = [
-      azurerm_user_assigned_identity.example.id
-    ]
-  }
   credential_user_managed_identity = {
     example = {
       name        = "credential-${azurerm_user_assigned_identity.example.name}"
@@ -199,6 +189,13 @@ module "df_with_integration_runtime_self_hosted" {
       }
     }
   }
+  managed_identities = {
+    system_assigned = false
+    user_assigned_resource_ids = [
+      azurerm_user_assigned_identity.example.id
+    ]
+  }
+
   depends_on = [
     azurerm_role_assignment.target,
     azurerm_virtual_machine_extension.bootstrap,
