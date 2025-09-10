@@ -32,6 +32,7 @@ resource "azapi_resource" "integration_runtime_self_hosted" {
   read_headers           = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = ["*"]
   update_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+
   depends_on = [
     azurerm_data_factory_credential_user_managed_identity.this,
   ]
