@@ -67,6 +67,8 @@ resource "azurerm_public_ip" "example" {
   location            = azurerm_resource_group.host.location
   name                = "pip"
   resource_group_name = azurerm_resource_group.host.name
+  sku                 = "Standard"
+  zones               = ["1", "2"]
 }
 
 resource "azurerm_network_interface" "example" {
@@ -90,30 +92,22 @@ resource "random_password" "pass" {
   upper   = true
 }
 
-resource "azurerm_virtual_machine" "bootstrap" {
-  location                      = azurerm_resource_group.host.location
-  name                          = "vm${random_string.suffix.result}"
-  network_interface_ids         = [azurerm_network_interface.example.id]
-  resource_group_name           = azurerm_resource_group.host.name
-  vm_size                       = "Standard_F4"
-  delete_os_disk_on_termination = true
+resource "azurerm_windows_virtual_machine" "bootstrap" {
+  admin_password = random_password.pass.result
+  admin_username = "adminuser"
+  location       = azurerm_resource_group.host.location
+  name           = "vm${random_string.suffix.result}"
+  network_interface_ids = [
+    azurerm_network_interface.example.id,
+  ]
+  resource_group_name = azurerm_resource_group.host.name
+  size                = "Standard_F2"
 
-  storage_os_disk {
-    create_option     = "FromImage"
-    name              = "myosdisk1"
-    caching           = "ReadWrite"
-    managed_disk_type = "Standard_LRS"
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
   }
-  os_profile {
-    admin_username = "testadmin"
-    computer_name  = "bootstrapvm"
-    admin_password = random_password.pass.result
-  }
-  os_profile_windows_config {
-    provision_vm_agent = true
-    timezone           = "Pacific Standard Time"
-  }
-  storage_image_reference {
+  source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
     sku       = "2016-Datacenter"
@@ -126,7 +120,7 @@ resource "azurerm_virtual_machine_extension" "bootstrap" {
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.10"
-  virtual_machine_id   = azurerm_virtual_machine.bootstrap.id
+  virtual_machine_id   = azurerm_windows_virtual_machine.bootstrap.id
   settings = jsonencode({
     "fileUris"         = ["https://raw.githubusercontent.com/Azure/azure-quickstart-templates/5661e3290f1d072195d26a5fc9d52bb372a55f48/quickstarts/microsoft.compute/vms-with-selfhost-integration-runtime/gatewayInstall.ps1"],
     "commandToExecute" = "powershell -ExecutionPolicy Unrestricted -File gatewayInstall.ps1 ${azurerm_data_factory_integration_runtime_self_hosted.host.primary_authorization_key} && timeout /t 120"
