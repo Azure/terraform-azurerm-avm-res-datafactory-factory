@@ -27,16 +27,13 @@ provider "azurerm" {
 # Single Naming Module for all resources
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.3.0"
-
-  prefix = ["test"]
-  suffix = ["03"]
+  version = "0.4.2"
 }
 
 # Create Resource Group with dynamically generated name
 resource "azurerm_resource_group" "rg" {
   location = "southeastasia"
-  name     = module.naming.resource_group.name
+  name     = module.naming.resource_group.name_unique
 }
 
 module "basic" {
@@ -44,8 +41,9 @@ module "basic" {
 
   location = azurerm_resource_group.rg.location
   # Required variables (adjust values accordingly)
-  name                = module.naming.data_factory.name
+  name                = "DataFactory-${module.naming.data_factory.name_unique}"
   resource_group_name = azurerm_resource_group.rg.name
+  enable_telemetry    = false
 }
 ```
 
@@ -91,7 +89,7 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: 0.3.0
+Version: 0.4.2
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

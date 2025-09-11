@@ -39,14 +39,16 @@ The following requirements are needed by this module:
 
 The following resources are used by this module:
 
+- [azapi_resource.cosmosdb_mongoapi_dataset](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.integration_runtime_self_hosted](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azurerm_data_factory.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory) (resource)
 - [azurerm_data_factory_credential_service_principal.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_credential_service_principal) (resource)
 - [azurerm_data_factory_credential_user_managed_identity.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_credential_user_managed_identity) (resource)
-- [azurerm_data_factory_integration_runtime_self_hosted.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_integration_runtime_self_hosted) (resource)
 - [azurerm_data_factory_linked_service_azure_blob_storage.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_azure_blob_storage) (resource)
 - [azurerm_data_factory_linked_service_azure_databricks.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_azure_databricks) (resource)
 - [azurerm_data_factory_linked_service_azure_file_storage.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_azure_file_storage) (resource)
 - [azurerm_data_factory_linked_service_azure_sql_database.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_azure_sql_database) (resource)
+- [azurerm_data_factory_linked_service_cosmosdb_mongoapi.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_cosmosdb_mongoapi) (resource)
 - [azurerm_data_factory_linked_service_data_lake_storage_gen2.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_data_lake_storage_gen2) (resource)
 - [azurerm_data_factory_linked_service_key_vault.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/data_factory_linked_service_key_vault) (resource)
 - [azurerm_management_lock.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/management_lock) (resource)
@@ -165,6 +167,35 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_dataset_cosmosdb_mongoapi"></a> [dataset\_cosmosdb\_mongoapi](#input\_dataset\_cosmosdb\_mongoapi)
+
+Description: A map of Azure Data Factory Datasets for CosmosDB MongoDB API, where each key represents a unique dataset configuration.  
+Each object in the map consists of the following properties:
+
+- `name` - (Required) The unique name of the Data Factory Dataset for CosmosDB MongoDB API.
+- `linked_service_name` - (Required) The name of the linked service that references the CosmosDB MongoDB API.
+- `collection_name` - (Required) The name of the collection in the CosmosDB MongoDB API.
+- `annotations` - (Optional) A list of tags that can be used for describing the Dataset.
+- `description` - (Optional) A description for the Dataset.
+- `folder` - (Optional) The folder name that this dataset is in. If not specified, dataset will appear at the root level.
+- `parameters` - (Optional) A map of parameters to associate with the dataset.
+
+Type:
+
+```hcl
+map(object({
+    name                = string
+    linked_service_name = string
+    collection_name     = string
+    annotations         = optional(list(string))
+    description         = optional(string)
+    folder              = optional(string)
+    parameters          = optional(map(string))
+  }))
+```
+
+Default: `{}`
+
 ### <a name="input_diagnostic_settings"></a> [diagnostic\_settings](#input\_diagnostic\_settings)
 
 Description: A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -265,6 +296,7 @@ Description: A map of Azure Data Factory Self-hosted Integration Runtimes, where
 - `self_contained_interactive_authoring_enabled` - (Optional) Specifies whether to enable interactive authoring when the self-hosted integration runtime cannot establish a connection with Azure Relay.
 - `rbac_authorization` - (Optional) Defines RBAC authorization settings. Changing this forces a new resource to be created.
   - `resource_id` - (Required) The resource identifier of the integration runtime to be shared.
+  - `credential_name` - (Optional) The name of the credential to use for the Managed Integration Runtime.
   **Note:** RBAC Authorization creates a linked Self-hosted Integration Runtime targeting the Shared Self-hosted Integration Runtime in `resource_id`. The linked Self-hosted Integration Runtime requires Contributor access to the Shared Self-hosted Data Factory.
 
 Type:
@@ -274,9 +306,10 @@ map(object({
     data_factory_id                              = optional(string)
     name                                         = string
     description                                  = optional(string, null)
-    self_contained_interactive_authoring_enabled = optional(bool, null)
+    self_contained_interactive_authoring_enabled = optional(bool, true)
     rbac_authorization = optional(object({
-      resource_id = string
+      credential_name = optional(string)
+      resource_id     = string
     }), null)
   }))
 ```
@@ -449,6 +482,26 @@ map(object({
       linked_service_name = string
       secret_name         = string
     }), null)
+  }))
+```
+
+Default: `{}`
+
+### <a name="input_linked_service_cosmosdb_mongoapi"></a> [linked\_service\_cosmosdb\_mongoapi](#input\_linked\_service\_cosmosdb\_mongoapi)
+
+Description: A map of CosmosDB MongoDB API linked services, where each key represents a unique linked service configuration. Each object in the map consists of the following properties:
+
+- `name` - (Required) Specifies the name of the Data Factory Linked Service.
+- `connection_string` - (Optional) The connection string to the CosmosDB MongoDB API.
+- `database` - (Optional) The name of the database in the CosmosDB MongoDB API.
+
+Type:
+
+```hcl
+map(object({
+    name              = string
+    connection_string = optional(string)
+    database          = optional(string)
   }))
 ```
 
