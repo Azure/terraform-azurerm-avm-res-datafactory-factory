@@ -131,3 +131,42 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
     }
   }
 }
+
+resource "azapi_resource" "cosmosdb_mongoapi_dataset" {
+  for_each = var.dataset_cosmosdb_mongoapi
+
+  name      = each.value.name
+  parent_id = azurerm_data_factory.this.id
+  type      = "Microsoft.DataFactory/factories/datasets@2018-06-01"
+  body = {
+    properties = {
+      type = "CosmosDbMongoDbApiCollection"
+      typeProperties = {
+        collection = each.value.collection_name
+      }
+      linkedServiceName = {
+        type          = "LinkedServiceReference"
+        referenceName = each.value.linked_service_name
+      }
+      annotations = each.value.annotations
+      description = each.value.description
+      folder = each.value.folder != null ? {
+        name = each.value.folder
+      } : null
+      parameters = each.value.parameters != null ? {
+        for k, v in each.value.parameters : k => {
+          type         = "String"
+          defaultValue = v
+        }
+      } : null
+    }
+  }
+  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+
+  depends_on = [
+    azurerm_data_factory_linked_service_cosmosdb_mongoapi.this,
+  ]
+}
