@@ -76,14 +76,13 @@ DESCRIPTION
 
 variable "customer_managed_key_id" {
   type        = string
-  default     = null
-  description = "Specifies the Azure Key Vault Key ID to be used as the Customer Managed Key (CMK). Required with user assigned identity."
+  description = "Specifies the Azure Key Vault Key ID to be used as the Customer Managed Key (CMK). Required if using customer managed keys."
 }
 
-variable "customer_managed_key_identity_id" {
+variable "customer_managed_key_user_assigned_identity_id" {
   type        = string
   default     = null
-  description = "Specifies the ID of the user assigned identity associated with the Customer Managed Key. Must be supplied if customer_managed_key_id is set."
+  description = "Specifies the ID of the user assigned identity associated with the Customer Managed Key. If not provided, the system assigned identity will be used."
 }
 
 variable "dataset_cosmosdb_mongoapi" {
