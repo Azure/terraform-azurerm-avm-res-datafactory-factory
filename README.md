@@ -29,7 +29,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.0, < 5.0.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.40.0, < 5.0.0)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
@@ -91,7 +91,7 @@ The following input variables are optional (have default values):
 
 ### <a name="input_credential_service_principal"></a> [credential\_service\_principal](#input\_credential\_service\_principal)
 
-Description: A map of Azure Data Factory Credentials, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Credentials, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the credential.
@@ -128,7 +128,7 @@ Default: `{}`
 
 ### <a name="input_credential_user_managed_identity"></a> [credential\_user\_managed\_identity](#input\_credential\_user\_managed\_identity)
 
-Description: A map of Azure Data Factory Credentials using User Assigned Managed Identity, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Credentials using User Assigned Managed Identity, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the credential.
@@ -153,15 +153,15 @@ Default: `{}`
 
 ### <a name="input_customer_managed_key_id"></a> [customer\_managed\_key\_id](#input\_customer\_managed\_key\_id)
 
-Description: Specifies the Azure Key Vault Key ID to be used as the Customer Managed Key (CMK). Required with user assigned identity.
+Description: Specifies the Azure Key Vault Key ID to be used as the Customer Managed Key (CMK). Required if using customer managed keys.
 
 Type: `string`
 
 Default: `null`
 
-### <a name="input_customer_managed_key_identity_id"></a> [customer\_managed\_key\_identity\_id](#input\_customer\_managed\_key\_identity\_id)
+### <a name="input_customer_managed_key_user_assigned_identity_id"></a> [customer\_managed\_key\_user\_assigned\_identity\_id](#input\_customer\_managed\_key\_user\_assigned\_identity\_id)
 
-Description: Specifies the ID of the user assigned identity associated with the Customer Managed Key. Must be supplied if customer\_managed\_key\_id is set.
+Description: Specifies the ID of the user assigned identity associated with the Customer Managed Key. If not provided, the system assigned identity will be used.
 
 Type: `string`
 
@@ -169,7 +169,7 @@ Default: `null`
 
 ### <a name="input_dataset_cosmosdb_mongoapi"></a> [dataset\_cosmosdb\_mongoapi](#input\_dataset\_cosmosdb\_mongoapi)
 
-Description: A map of Azure Data Factory Datasets for CosmosDB MongoDB API, where each key represents a unique dataset configuration.  
+Description: A map of Azure Data Factory Datasets for CosmosDB MongoDB API, where each key represents a unique dataset configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the Data Factory Dataset for CosmosDB MongoDB API.
@@ -232,8 +232,8 @@ Default: `{}`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
-Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see <https://aka.ms/avm/telemetryinfo>.  
+Description: This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
@@ -384,7 +384,7 @@ Default: `{}`
 
 ### <a name="input_linked_service_azure_file_storage"></a> [linked\_service\_azure\_file\_storage](#input\_linked\_service\_azure\_file\_storage)
 
-Description: A map of Azure Data Factory Linked Services for Azure File Storage, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Linked Services for Azure File Storage, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the linked service.
@@ -432,7 +432,7 @@ Default: `{}`
 
 ### <a name="input_linked_service_azure_sql_database"></a> [linked\_service\_azure\_sql\_database](#input\_linked\_service\_azure\_sql\_database)
 
-Description: A map of Azure Data Factory Linked Services for Azure SQL Database, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Linked Services for Azure SQL Database, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the linked service.
@@ -509,7 +509,7 @@ Default: `{}`
 
 ### <a name="input_linked_service_data_lake_storage_gen2"></a> [linked\_service\_data\_lake\_storage\_gen2](#input\_linked\_service\_data\_lake\_storage\_gen2)
 
-Description: A map of Azure Data Factory Linked Services for Data Lake Storage Gen2, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Linked Services for Data Lake Storage Gen2, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the linked service.
@@ -552,7 +552,7 @@ Default: `{}`
 
 ### <a name="input_linked_service_databricks"></a> [linked\_service\_databricks](#input\_linked\_service\_databricks)
 
-Description: A map of Azure Data Factory Linked Services for Databricks, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Linked Services for Databricks, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `adb_domain` - (Required) The domain URL of the Databricks instance.
@@ -634,7 +634,7 @@ Default: `{}`
 
 ### <a name="input_linked_service_key_vault"></a> [linked\_service\_key\_vault](#input\_linked\_service\_key\_vault)
 
-Description: A map of Azure Data Factory Linked Services for Azure Key Vault, where each key represents a unique configuration.  
+Description: A map of Azure Data Factory Linked Services for Azure Key Vault, where each key represents a unique configuration.
 Each object in the map consists of the following properties:
 
 - `name` - (Required) The unique name of the linked service.
