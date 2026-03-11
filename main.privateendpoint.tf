@@ -1,7 +1,7 @@
 resource "azurerm_private_endpoint" "this_managed_dns_zone_groups" {
-  for_each = { for k, v in var.private_endpoints : k => v if var.private_endpoints_manage_dns_zone_group == false }
+  for_each = { for k, v in var.private_endpoints : k => v if var.private_endpoints_manage_dns_zone_group }
 
-  location                      = var.location
+  location                      = each.value.location != null ? each.value.location : var.location
   name                          = each.value.name != null ? each.value.name : "pe-${var.name}"
   resource_group_name           = each.value.resource_group_name != null ? each.value.resource_group_name : var.resource_group_name
   subnet_id                     = each.value.subnet_resource_id
@@ -35,9 +35,9 @@ resource "azurerm_private_endpoint" "this_managed_dns_zone_groups" {
 }
 
 resource "azurerm_private_endpoint" "this_unmanaged_dns_zone_groups" {
-  for_each = { for k, v in var.private_endpoints : k => v if var.private_endpoints_manage_dns_zone_group == true }
+  for_each = { for k, v in var.private_endpoints : k => v if !var.private_endpoints_manage_dns_zone_group  }
 
-  location                      = var.location
+  location                      = each.value.location != null ? each.value.location : var.location
   name                          = each.value.name != null ? each.value.name : "pe-${var.name}"
   resource_group_name           = each.value.resource_group_name != null ? each.value.resource_group_name : var.resource_group_name
   subnet_id                     = each.value.subnet_resource_id
@@ -61,9 +61,6 @@ resource "azurerm_private_endpoint" "this_unmanaged_dns_zone_groups" {
     }
   }
 }
-
-
-
 
 resource "azurerm_private_endpoint_application_security_group_association" "this" {
   for_each = local.private_endpoint_application_security_group_associations
