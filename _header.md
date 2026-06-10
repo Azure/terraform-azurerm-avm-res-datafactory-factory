@@ -1,19 +1,21 @@
 # terraform-azurerm-avm-res-datafactory
 
-This is a template repo for Terraform Azure Verified Modules.
+This module deploys an Azure Data Factory (Version 2) resource, following the [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) specification for Terraform resource modules.
 
-Things to do:
+## Features
 
-1. Set up a GitHub repo environment called `test`.
-1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
-1. Create a user-assigned managed identity in your test subscription.
-1. Create a role assignment for the managed identity on your test subscription, use the minimum required role.
-1. Configure federated identity credentials on the user assigned managed identity. Use the GitHub environment.
-1. Search and update TODOs within the code and remove the TODO comments once complete.
-
-> [!IMPORTANT]
-> As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
-> 
-> All module **MUST** be published as a pre-release version (e.g., `0.1.0`, `0.1.1`, `0.2.0`, etc.) until the AVM framework becomes GA.
-> 
-> However, it is important to note that this **DOES NOT** mean that the modules cannot be consumed and utilized. They **CAN** be leveraged in all types of environments (dev, test, prod etc.). Consumers can treat them just like any other IaC module and raise issues or feature requests against them as they learn from the usage of the module. Consumers should also read the release notes for each version, if considering updating to a more recent version of a module to see if there are any considerations or breaking changes etc.
+- Azure Data Factory factory resource with full attribute coverage
+- Optional GitHub or Azure DevOps (VSTS) source control integration
+- Global parameters support
+- Managed Identity (System-assigned and/or User-assigned)
+- Managed Virtual Network support
+- Customer-Managed Key (CMK) encryption
+- Microsoft Purview integration
+- Self-hosted Integration Runtime (via AzAPI)
+- Linked Services: Azure Blob Storage, Azure File Storage, Azure SQL Database, Azure Data Lake Storage Gen2, Azure Databricks, Azure Key Vault, CosmosDB MongoDB API
+- CosmosDB MongoDB API Dataset (via AzAPI)
+- Service Principal and User-Assigned Managed Identity credentials
+- Private Endpoints with optional DNS zone group management
+- Diagnostic Settings
+- Role Assignments
+- Resource Lock

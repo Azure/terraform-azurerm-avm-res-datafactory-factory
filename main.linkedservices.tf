@@ -123,6 +123,7 @@ resource "azurerm_data_factory_linked_service_azure_sql_database" "this" {
   additional_properties    = each.value.additional_properties
   annotations              = each.value.annotations
   connection_string        = each.value.connection_string
+  credential_name          = each.value.credential_name
   description              = each.value.description
   integration_runtime_name = each.value.integration_runtime_name
   parameters               = each.value.parameters
