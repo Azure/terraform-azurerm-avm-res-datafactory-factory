@@ -1,4 +1,4 @@
-# terraform-azurerm-avm-res-datafactory
+# terraform-azurerm-avm-res-datafactory-factory
 
 This module deploys an Azure Data Factory (Version 2) resource, following the [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) specification for Terraform resource modules.
 
