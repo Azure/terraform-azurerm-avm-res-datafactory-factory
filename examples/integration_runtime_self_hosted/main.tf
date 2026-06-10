@@ -99,7 +99,7 @@ resource "azurerm_windows_virtual_machine" "bootstrap" {
     azurerm_network_interface.example.id,
   ]
   resource_group_name = azurerm_resource_group.host.name
-  size                = "Standard_F2"
+  size                = "Standard_B2s"
 
   os_disk {
     caching              = "ReadWrite"
@@ -186,5 +186,4 @@ module "df_with_integration_runtime_self_hosted" {
     azurerm_virtual_machine_extension.bootstrap,
   ]
 }
-
 
