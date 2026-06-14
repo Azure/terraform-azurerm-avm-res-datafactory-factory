@@ -1,4 +1,9 @@
 # Tests Azure File Storage linked service configuration.
+mock_provider "azurerm" {}
+mock_provider "azapi" {}
+mock_provider "modtm" {}
+mock_provider "random" {}
+
 variables {
   name                = "df-test-linked"
   resource_group_name = "rg-test-linked"

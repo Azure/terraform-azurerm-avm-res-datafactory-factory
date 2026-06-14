@@ -1,4 +1,9 @@
 # Tests a CosmosDB MongoDB API dataset with a linked service.
+mock_provider "azurerm" {}
+mock_provider "azapi" {}
+mock_provider "modtm" {}
+mock_provider "random" {}
+
 variables {
   name                = "df-test-dataset"
   resource_group_name = "rg-test-dataset"

@@ -1,4 +1,9 @@
 # Tests diagnostic settings configuration.
+mock_provider "azurerm" {}
+mock_provider "azapi" {}
+mock_provider "modtm" {}
+mock_provider "random" {}
+
 variables {
   name                = "df-test-diag"
   resource_group_name = "rg-test-diag"

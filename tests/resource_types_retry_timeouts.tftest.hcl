@@ -1,5 +1,10 @@
 # Tests the new resource_types, retry, and timeouts variables introduced
 # to satisfy AVM specs TFFR6 and TFFR7.
+mock_provider "azurerm" {}
+mock_provider "azapi" {}
+mock_provider "modtm" {}
+mock_provider "random" {}
+
 variables {
   name                = "df-test-overrides"
   resource_group_name = "rg-test-overrides"

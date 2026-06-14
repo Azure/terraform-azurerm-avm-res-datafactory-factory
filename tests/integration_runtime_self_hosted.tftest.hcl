@@ -1,5 +1,10 @@
 # Tests the self-hosted integration runtime with RBAC authorization and a
 # user-assigned managed identity credential.
+mock_provider "azurerm" {}
+mock_provider "azapi" {}
+mock_provider "modtm" {}
+mock_provider "random" {}
+
 variables {
   name                = "df-test-ir"
   resource_group_name = "rg-test-ir"
