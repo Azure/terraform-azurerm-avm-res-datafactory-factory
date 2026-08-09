@@ -137,7 +137,7 @@ resource "azapi_resource" "cosmosdb_mongoapi_dataset" {
 
   name      = each.value.name
   parent_id = azurerm_data_factory.this.id
-  type      = "Microsoft.DataFactory/factories/datasets@2018-06-01"
+  type      = var.resource_types.data_factory_datasets
   body = {
     properties = {
       type = "CosmosDbMongoDbApiCollection"
@@ -161,10 +161,24 @@ resource "azapi_resource" "cosmosdb_mongoapi_dataset" {
       } : null
     }
   }
-  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  create_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  read_headers           = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  replace_triggers_refs  = []
+  response_export_values = []
+  retry                  = var.retry
+  update_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+
+    content {
+      create = timeouts.value.create
+      delete = timeouts.value.delete
+      read   = timeouts.value.read
+      update = timeouts.value.update
+    }
+  }
 
   depends_on = [
     azurerm_data_factory_linked_service_cosmosdb_mongoapi.this,
