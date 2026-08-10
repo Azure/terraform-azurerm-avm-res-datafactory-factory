@@ -26,6 +26,7 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "this" {
       secret_name         = key_vault_sas_token.value.secret_name
     }
   }
+
   dynamic "service_principal_linked_key_vault_key" {
     for_each = each.value.service_principal_linked_key_vault_key != null ? [each.value.service_principal_linked_key_vault_key] : []
 
@@ -63,6 +64,7 @@ resource "azurerm_data_factory_linked_service_azure_databricks" "this" {
       min_number_of_workers = instance_pool.value.min_number_of_workers
     }
   }
+
   dynamic "key_vault_password" {
     for_each = each.value.key_vault_password != null ? [each.value.key_vault_password] : []
 
@@ -71,6 +73,7 @@ resource "azurerm_data_factory_linked_service_azure_databricks" "this" {
       secret_name         = key_vault_password.value.secret_name
     }
   }
+
   dynamic "new_cluster_config" {
     for_each = each.value.new_cluster_config != null ? [each.value.new_cluster_config] : []
 
@@ -139,6 +142,7 @@ resource "azurerm_data_factory_linked_service_azure_sql_database" "this" {
       secret_name         = key_vault_connection_string.value.secret_name
     }
   }
+
   dynamic "key_vault_password" {
     for_each = each.value.key_vault_password != null ? [each.value.key_vault_password] : []
 

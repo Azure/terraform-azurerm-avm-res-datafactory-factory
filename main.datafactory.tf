@@ -21,6 +21,7 @@ resource "azurerm_data_factory" "this" {
       publishing_enabled = github_configuration.value.publishing_enabled
     }
   }
+
   dynamic "global_parameter" {
     for_each = var.global_parameters
 
@@ -30,6 +31,7 @@ resource "azurerm_data_factory" "this" {
       value = global_parameter.value.value
     }
   }
+
   dynamic "identity" {
     for_each = local.managed_identities.system_assigned_user_assigned
 
@@ -38,6 +40,7 @@ resource "azurerm_data_factory" "this" {
       identity_ids = identity.value.user_assigned_resource_ids
     }
   }
+
   dynamic "vsts_configuration" {
     for_each = var.vsts_configuration != null ? [var.vsts_configuration] : []
 
@@ -123,6 +126,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
       category_group = enabled_log.value
     }
   }
+
   dynamic "metric" {
     for_each = each.value.metric_categories
 
