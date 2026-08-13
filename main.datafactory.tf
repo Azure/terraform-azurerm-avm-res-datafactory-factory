@@ -1,13 +1,18 @@
+resource "azurerm_data_factory_customer_managed_key" "this" {
+  count                     = var.customer_managed_key_id != null ? 1 : 0
+  data_factory_id           = azurerm_data_factory.this.id
+  customer_managed_key_id   = var.customer_managed_key_id
+  user_assigned_identity_id = var.customer_managed_key_user_assigned_identity_id
+}
+
 resource "azurerm_data_factory" "this" {
-  location                         = var.location
-  name                             = var.name
-  resource_group_name              = var.resource_group_name
-  customer_managed_key_id          = var.customer_managed_key_id
-  customer_managed_key_identity_id = var.customer_managed_key_identity_id
-  managed_virtual_network_enabled  = var.managed_virtual_network_enabled
-  public_network_enabled           = var.public_network_enabled
-  purview_id                       = var.purview_id
-  tags                             = var.tags
+  location                        = var.location
+  name                            = var.name
+  resource_group_name             = var.resource_group_name
+  managed_virtual_network_enabled = var.managed_virtual_network_enabled
+  public_network_enabled          = var.public_network_enabled
+  purview_id                      = var.purview_id
+  tags                            = var.tags
 
   dynamic "github_configuration" {
     for_each = var.github_configuration != null ? [var.github_configuration] : []
