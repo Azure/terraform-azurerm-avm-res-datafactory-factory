@@ -9,7 +9,7 @@ resource "azapi_resource" "integration_runtime_self_hosted" {
 
   name      = each.value.name
   parent_id = azurerm_data_factory.this.id
-  type      = "Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01"
+  type      = var.resource_types.data_factory_integration_runtimes
   body = {
     properties = {
       type        = "SelfHosted"
@@ -30,8 +30,21 @@ resource "azapi_resource" "integration_runtime_self_hosted" {
   create_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   delete_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   read_headers           = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  replace_triggers_refs  = []
   response_export_values = ["*"]
+  retry                  = var.retry
   update_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+
+    content {
+      create = timeouts.value.create
+      delete = timeouts.value.delete
+      read   = timeouts.value.read
+      update = timeouts.value.update
+    }
+  }
 
   depends_on = [
     azurerm_data_factory_credential_user_managed_identity.this,

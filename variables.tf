@@ -726,6 +726,41 @@ variable "purview_id" {
   description = "Specifies the ID of the purview account resource associated with the Data Factory."
 }
 
+variable "resource_types" {
+  type = object({
+    data_factory_datasets             = optional(string, "Microsoft.DataFactory/factories/datasets@2018-06-01")
+    data_factory_integration_runtimes = optional(string, "Microsoft.DataFactory/factories/integrationRuntimes@2018-06-01")
+  })
+  default     = {}
+  description = <<DESCRIPTION
+Controls the API versions used for each `azapi_resource` declared by this module (TFFR6).
+Each key maps to one AzAPI resource type. Consumers may override a key to pin a different API version.
+
+- `data_factory_datasets`             - API version for `Microsoft.DataFactory/factories/datasets`. Defaults to `2018-06-01`.
+- `data_factory_integration_runtimes` - API version for `Microsoft.DataFactory/factories/integrationRuntimes`. Defaults to `2018-06-01`.
+DESCRIPTION
+  nullable    = false
+}
+
+variable "retry" {
+  type = object({
+    error_message_regex  = optional(list(string))
+    interval_seconds     = optional(number)
+    max_interval_seconds = optional(number)
+  })
+  default     = null
+  description = <<DESCRIPTION
+Retry configuration applied to every `azapi` resource managed by the module
+(root resource and all submodules). Defaults to `null` (no custom retry).
+
+- `error_message_regex`  - (Optional) Regex patterns matching error messages that trigger a retry.
+- `interval_seconds`     - (Optional) Initial interval between retries in seconds.
+- `max_interval_seconds` - (Optional) Maximum interval between retries in seconds.
+
+See <https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource#retry>.
+DESCRIPTION
+}
+
 variable "role_assignments" {
   type = map(object({
     role_definition_id_or_name             = string
@@ -770,6 +805,21 @@ variable "tags" {
   type        = map(string)
   default     = null
   description = "A mapping of tags to assign to the resource."
+}
+
+variable "timeouts" {
+  type = object({
+    create = optional(string)
+    read   = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default     = null
+  description = <<DESCRIPTION
+Default per-operation timeouts applied to every `azapi` resource managed by the
+module. Defaults to `null` (provider defaults). Each value is a Go duration
+string (e.g. `30m`, `1h`).
+DESCRIPTION
 }
 
 variable "vsts_configuration" {
