@@ -24,7 +24,6 @@ provider "azurerm" {
   features {}
 }
 
-
 # This allows us to randomize the region for the resource group.
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"

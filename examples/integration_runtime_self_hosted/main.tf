@@ -56,10 +56,10 @@ resource "azurerm_virtual_network" "example" {
 }
 
 resource "azurerm_subnet" "example" {
-  address_prefixes     = ["10.0.2.0/24"]
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.host.name
   virtual_network_name = azurerm_virtual_network.example.name
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "example" {
@@ -91,20 +91,21 @@ resource "random_password" "pass" {
 }
 
 resource "azurerm_windows_virtual_machine" "bootstrap" {
-  admin_password = random_password.pass.result
-  admin_username = "adminuser"
-  location       = azurerm_resource_group.host.location
-  name           = "vm${random_string.suffix.result}"
+  location = azurerm_resource_group.host.location
+  name     = "vm${random_string.suffix.result}"
   network_interface_ids = [
     azurerm_network_interface.example.id,
   ]
   resource_group_name = azurerm_resource_group.host.name
   size                = "Standard_F2"
+  admin_password      = random_password.pass.result
+  admin_username      = "adminuser"
 
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
+
   source_image_reference {
     offer     = "WindowsServer"
     publisher = "MicrosoftWindowsServer"
@@ -186,5 +187,3 @@ module "df_with_integration_runtime_self_hosted" {
     azurerm_virtual_machine_extension.bootstrap,
   ]
 }
-
-
