@@ -22,7 +22,7 @@ module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "0.3.0"
 
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
 }
 
 # This allows us to randomize the region for the resource group.
@@ -63,5 +63,5 @@ module "datafactory" {
       workspace_resource_id = azurerm_log_analytics_workspace.this.id
     }
   }
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
 }
