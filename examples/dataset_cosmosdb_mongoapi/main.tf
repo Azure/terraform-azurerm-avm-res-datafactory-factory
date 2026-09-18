@@ -49,7 +49,7 @@ module "basic" {
       }
     }
   }
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
   linked_service_cosmosdb_mongoapi = {
     cosmosdb_ls_1 = {
       name              = "ls-cosmosdb-mongoapi-test"
