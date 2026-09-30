@@ -38,7 +38,7 @@ resource "random_string" "suffix" {
 # Naming Module for Consistent Resource Names
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  version = "0.4.3"
 
   suffix = [random_string.suffix.result]
 }
@@ -263,7 +263,7 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: 0.4.2
+Version: 0.4.3
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

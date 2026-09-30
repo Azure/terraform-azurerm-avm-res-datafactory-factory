@@ -20,7 +20,7 @@ provider "azurerm" {
 # Single Naming Module for all resources
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "0.4.2"
+  version = "0.4.3"
 }
 
 # Create Resource Group with dynamically generated name
