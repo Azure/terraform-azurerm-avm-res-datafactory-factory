@@ -1,5 +1,11 @@
 # terraform-azurerm-avm-res-datafactory
 
+## Upgrade notes
+
+Terraform 1.9 or later and AzureRM 4.x are required. Existing Data Factory and private endpoint resource addresses are unchanged.
+
+Private endpoint locks and role assignments are now created when configured; earlier versions ignored these settings. Remove those settings before upgrading if they are not intended. Optional `subresource_name` and IP configuration `member_name` values now take effect, retaining `dataFactory` and `Azure Data Factory` as their defaults.
+
 This is a template repo for Terraform Azure Verified Modules.
 
 Things to do:

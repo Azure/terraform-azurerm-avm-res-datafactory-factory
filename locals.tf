@@ -30,5 +30,14 @@ locals {
       }
     ]
   ]) : "${assoc.pe_key}-${assoc.asg_key}" => assoc }
+  private_endpoint_role_assignments = { for assignment in flatten([
+    for pe_key, endpoint in var.private_endpoints : [
+      for role_key, role_assignment in endpoint.role_assignments : {
+        pe_key          = pe_key
+        role_key        = role_key
+        role_assignment = role_assignment
+      }
+    ]
+  ]) : jsonencode([assignment.pe_key, assignment.role_key]) => assignment }
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
 }
