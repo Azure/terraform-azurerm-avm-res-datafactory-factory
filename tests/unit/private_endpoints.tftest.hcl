@@ -1,4 +1,11 @@
-mock_provider "azapi" {}
+mock_provider "azapi" {
+  mock_data "azapi_client_config" {
+    defaults = {
+      subscription_resource_id = "/subscriptions/00000000-0000-0000-0000-000000000000"
+    }
+  }
+}
+
 mock_provider "azurerm" {
   mock_resource "azurerm_data_factory" {
     defaults = {
@@ -11,8 +18,6 @@ mock_provider "azurerm" {
     }
   }
 }
-mock_provider "modtm" {}
-mock_provider "random" {}
 
 variables {
   name                = "test-factory"
@@ -26,8 +31,8 @@ run "no_private_endpoints_by_default" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
 
   assert {
@@ -45,8 +50,8 @@ run "managed_endpoint_defaults" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
@@ -90,8 +95,8 @@ run "managed_endpoint_custom_settings" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
@@ -161,8 +166,8 @@ run "unmanaged_endpoint_custom_settings" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints_manage_dns_zone_group = false
@@ -206,8 +211,8 @@ run "invalid_subnet_id" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
@@ -224,8 +229,8 @@ run "invalid_dns_zone_id" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
@@ -243,8 +248,8 @@ run "invalid_application_security_group_id" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
@@ -264,8 +269,8 @@ run "invalid_delegated_identity_id" {
   providers = {
     azapi   = azapi
     azurerm = azurerm
-    modtm   = modtm
-    random  = random
+
+
   }
   variables {
     private_endpoints = {
