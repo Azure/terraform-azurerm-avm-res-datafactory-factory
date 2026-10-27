@@ -6,6 +6,8 @@ Terraform 1.9 or later and AzureRM 4.x are required. Existing Data Factory and p
 
 Private endpoint locks and role assignments are now created when configured; earlier versions ignored these settings. Remove those settings before upgrading if they are not intended. Optional `subresource_name` and IP configuration `member_name` values now take effect, retaining `dataFactory` and `Azure Data Factory` as their defaults.
 
+When two or more `private_endpoints` in the same resource group omit `name`, their generated names now include a bounded map-key component and hash so they do not collide. Unnamed endpoints in different resource groups retain the legacy default. A sole unnamed endpoint keeps the previous `pe-<factory-name>` default, even if other endpoints have explicit names. **Upgrade caution:** changing from one unnamed endpoint to multiple unnamed endpoints in the same resource group (or back) changes generated names and may force Azure endpoint replacement. To add another endpoint without replacing an existing unnamed one, explicitly set the existing endpoint's `name` to its current `pe-<factory-name>` before changing the map. Review `terraform plan` before applying.
+
 This is a template repo for Terraform Azure Verified Modules.
 
 Things to do:
