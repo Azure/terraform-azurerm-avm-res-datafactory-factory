@@ -63,6 +63,10 @@ resource "azurerm_private_endpoint" "this_unmanaged_dns_zone_groups" {
       subresource_name   = coalesce(each.value.subresource_name, "dataFactory")
     }
   }
+
+  lifecycle {
+    ignore_changes = [private_dns_zone_group]
+  }
 }
 
 resource "azurerm_private_endpoint_application_security_group_association" "this" {
